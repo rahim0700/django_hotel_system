@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Guest Profile</title></head>
+<body style="font-family: sans-serif; margin: 40px;">
+    <a href="{% url 'home' %}">← Back to Dashboard</a>
+    
+    <h1>Guest Profile: {{ guest.first_name }} {{ guest.last_name }}</h1>
+    <p><strong>Contact:</strong> {{ guest.contact }}</p>
+
+    <h3>Booking History</h3>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <tr style="background: #eee;">
+            <th>Room</th>
+            <th>Check-in Date</th>
+            <th>Check-out Date</th>
+            <th>Status</th>
+        </tr>
+        {% for stay in history %}
+        <tr>
+            <td>{{ stay.room.room_number }}</td>
+            <td>{{ stay.check_in }}</td>
+            <td>{{ stay.check_out|default:"Still Checked-in" }}</td>
+            <td>{% if stay.is_active %}Active{% else %}Completed{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No previous bookings found.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

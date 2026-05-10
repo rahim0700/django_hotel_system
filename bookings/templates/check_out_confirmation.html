@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Confirm Check-Out</title></head>
+<body style="font-family: sans-serif; margin: 40px;">
+    <h1>Check-Out Confirmation</h1>
+    <p>Are you sure you want to check out <strong>{{ booking.guest }}</strong> from <strong>Room {{ booking.room.room_number }}</strong>?</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" style="background: #e74c3c; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+            Confirm Check-Out
+        </button>
+        <a href="{% url 'home' %}" style="margin-left: 20px;">Cancel</a>
+    </form>
+</body>
+</html>

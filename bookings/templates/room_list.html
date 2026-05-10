@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Dashboard</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f4f4f4; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #2c3e50; color: white; }
+        .status-available { color: green; font-weight: bold; }
+        .status-occupied { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Staff Dashboard - Room Status</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h2>Current Room Occupancy</h2>
+    
+            <a href="{% url 'register_guest' %}" 
+                style="background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                + Register New Guest
+            </a>
+
+            <a href="{% url 'check_in' %}" 
+                style="background-color: #2980b9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                + New Check-In
+            </a>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h3>Guest List</h3>
+            <ul>
+                {% for guest in guests %}
+                    <li>
+                        <a href="{% url 'guest_detail' guest.id %}">
+                            {{ guest.first_name }} {{ guest.last_name }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No guests found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.room_type }}</td>
+                <td class="status-{{ room.room_status|lower }}">{{ room.room_status }}</td>
+                <td>UGX {{ room.price_per_night }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No rooms found. Go to Admin to add some!</td></tr>
+            {% endfor %}
+
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.room_status }}</td>
+                <td>
+                    {% if room.room_status == 'Occupied' %}
+                        {% for booking in room.booking_set.all %}
+                            {% if booking.is_active %}
+                                <a href="{% url 'check_out_guest' booking.id %}" 
+                                    style="color: #e74c3c; font-weight: bold;">Check-Out</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span style="color: #95a5a6;">N/A</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+</body>
+</html>

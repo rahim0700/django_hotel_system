@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Check-In Guest</title></head>
+<body>
+    <h1>Check-In Guest to Room</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="background: #2980b9; color: white;">Confirm Check-In</button>
+    </form>
+    <a href="{% url 'home' %}">Cancel</a>
+</body>
+</html>
